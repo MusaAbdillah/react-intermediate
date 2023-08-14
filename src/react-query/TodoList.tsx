@@ -1,28 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-
-interface Todo {
-  id: number;
-  title: string;
-  userId: number;
-  completed: boolean;
-}
+import useTodo from "./hooks/useTodo";
 
 const TodoList = () => {
-  const fetchData = () =>
-    axios
-      .get<Todo[]>("https://jsonplaceholder.typicode.com/todos")
-      .then((res) => res.data);
-
-  const {
-    data: todos,
-    error,
-    isLoading,
-  } = useQuery<Todo[], Error>({
-    queryKey: ["TodoList"],
-    queryFn: fetchData,
-  });
+  const { data: todos, error, isLoading } = useTodo();
 
   // const [todos, setTodos] = useState<Todo[]>([]);
   // const [error, setError] = useState("");
