@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import usePost from "./hooks/usePost";
+import React from "react";
 
 interface Post {
   id: number;
@@ -13,11 +14,9 @@ const PostList = () => {
   // const [userId, setUserId] = useState<number>();
   const pageSize = 10;
   const [page, setPage] = useState(1);
-  const {
-    data: posts,
-    error,
-    isLoading,
-  } = usePost({ page: page, pageSize: pageSize });
+  const { data, error, isLoading, fetchNextPage, isFetchingNextPage } = usePost(
+    { pageSize: pageSize }
+  );
 
   if (error) return <p>{error.message}</p>;
 
@@ -34,25 +33,29 @@ const PostList = () => {
         <option value="3">User3</option>
       </select> */}
       <ul className="list-group">
-        {posts?.map((post) => (
-          <li key={post.id} className="list-group-item">
-            {post.title}
-          </li>
+        {data?.pages.map((posts, index) => (
+          <React.Fragment key={index}>
+            {posts?.map((post) => (
+              <li key={post.id} className="list-group-item">
+                {post.title}
+              </li>
+            ))}
+          </React.Fragment>
         ))}
       </ul>
-      <button
+      {/* <button
         disabled={page === 1}
         className="btn btn-primary my-3"
         onClick={() => setPage(page - 1)}
       >
         Previous
-      </button>
+      </button> */}
       <button
-        // disabled={page === 1}
+        disabled={isFetchingNextPage}
         className="btn btn-primary my-3 ms-1" //ms-1 margin start 1
-        onClick={() => setPage(page + 1)}
+        onClick={() => fetchNextPage()}
       >
-        Next
+        {isFetchingNextPage ? "Loading ..." : "Load more"}
       </button>
     </>
   );
