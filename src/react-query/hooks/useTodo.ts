@@ -1,15 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
-import ApiClient from "../services/apiClient";
+import todoService, { Todo } from "../services/todoService";
 
-const apiClient = new ApiClient<Todo>('/todos');
-
-export interface Todo {
-    id: number;
-    title: string;
-    userId: number;
-    completed: boolean;
-  }
 
   
 const useTodo  = () => {
@@ -20,7 +11,7 @@ const useTodo  = () => {
       
         return useQuery<Todo[], Error>({
           queryKey: ["TodoList"],
-          queryFn: apiClient.getAll,
+          queryFn: todoService.getAll,
         });
 }
 
